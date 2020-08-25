@@ -1,3 +1,7 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+<title>foro</title>
+
 <style>
 html {
 	font-family: sans;
@@ -69,29 +73,29 @@ if(isset($_GET['reply'])){
 	$stmt->close();
 }
 
-$result = $mysqli->query("SELECT * FROM posts");
+$resultado = $mysqli->query("SELECT * FROM posts");
 
-buildTree($result->fetch_all(MYSQLI_ASSOC));
+buildTree($resultado->fetch_all(MYSQLI_ASSOC));
 
-function buildTree(array $rows, $replyto = NULL) {
-    	foreach ($rows as $row) {
-        	if ($row['replyto'] == $replyto) {
+function buildTree(array $filas, $replyto = NULL) {
+	foreach ($filas as $fila) {
+		if ($fila['replyto'] == $replyto) {
 			echo "
 				<details open>
-            				<summary>{$row['post']}
+					<summary>{$fila['post']}
 						<details class='reply'>
 							<summary>&#8617;</summary>
 							<form action='?'>
-								<input type='hidden' name='replyto' value='{$row['id']}'>
+								<input type='hidden' name='replyto' value='{$fila['id']}'>
 								<input type='text' name='reply' size='32'>
 								<input type='submit' value='Responder'>
 							</form>
 						</details>
 					</summary>
 			";
-			buildTree($rows, $row['id']);
+			buildTree($filas, $fila['id']);
 			echo "</details>";
 		}
-    	}
+	}
 }
 ?>
